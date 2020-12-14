@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "incremental": true,
+        "module": "CommonJS",
+        "jsx": "react",
+        "sourceMap": true,
+        "strict": true,
+        "esModuleInterop": true,
+        //"noImplicitAny": true,
+        //"strictNullChecks": true,
+        "forceConsistentCasingInFileNames": true,
+    }
+}

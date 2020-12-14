@@ -1,0 +1,11 @@
+<main class="flex flex-col min-h-screen min-w-full select-none">
+    <header class="flex flex-row my-4 ">
+        <h1 class="text-xl text-white mr-auto ml-8 font-light"><a href="/">Codenames</a></h1>
+        <p class="text-base text-gray-300 ml-auto mr-8 font-normal">v0.1.0</p>
+    </header>
+    <div id="app" class="flex flex-col flex-grow overflow-hidden place-content-center place-items-center m-0 p-3"></div>
+</main>
+
+<%- contentFor('scripts') %>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+<script src="/js/client.js"></script>
