@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import i18n from "./i18n";
+
 type RegisterFormProps = {
     defaultName?: string;
     //defaultRoomId?: string;
@@ -94,7 +96,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
             <div className="absolute rounded-xl shadow-lg inset-3 bg-gray-300 transform translate-y-5"></div>
             <div className="relative flex flex-col justify-items-center rounded-xl shadow-lg bg-gray-100 px-32 py-10">
                 <h1 className="text-3xl text-center font-bold mb-4">Play Codenames!</h1>
-                <p className="text-center mb-2">Enter a username and press Play!</p>
+                <p className="text-center mb-2">{i18n.current.testMessage}</p>
                 {validationMessage}
                 {nameInput}
                 {/* {roomIdInput} */}

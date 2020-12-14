@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import { GameState, Card, TeamColour, GamePhase, ClientAction } from "../../shared/codenames";
 import { HintProps, TeamProps, CardGridProps, CardProps } from "./components";
 
+import i18n, { LanguageDefinition } from "./i18n";
+
 const container = document.getElementById("app");
 
 import * as Registration from "./registration";
