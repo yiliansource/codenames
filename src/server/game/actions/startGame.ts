@@ -15,19 +15,22 @@ const cardAmount = 25;
  */
 const StartGameAction: GameAction = {
     name: "startGame",
-    execute: (caller: Player, game: GameState, data: any) => {
-        game.phase = GamePhase.Round;
+    execute: (caller: Player, game: GameState) => {
+        if (caller.isHost && game.phase !== GamePhase.Round) {
+            game.phase = GamePhase.Round;
+            
+            game.players.find(p => p.team === TeamColour.Red)!.isGameMaster = true;
+            game.players.find(p => p.team === TeamColour.Blue)!.isGameMaster = true;
+            
+            let startingTeam = randomTeam();
+            let words = getWords(game.language, cardAmount);
+            let solutions = generateSolution(cardAmount, 7, 1, startingTeam);
+            game.cards = words.map((word: string, index: number) => <Card>{ content: word, colour: solutions[index] });
+            game.inTurn = startingTeam;
 
-        game.players.find(p => p.team === TeamColour.Red)!.isGameMaster = true;
-        game.players.find(p => p.team === TeamColour.Blue)!.isGameMaster = true;
-
-        let startingTeam = randomTeam();
-        let words = getWords(game.language, cardAmount);
-        let solutions = generateSolution(cardAmount, 7, 1, startingTeam);
-        game.cards = words.map((word: string, index: number) => <Card>{ content: word, colour: solutions[index] });
-        game.inTurn = startingTeam;
-
-        return true;
+            return true;
+        }
+        return false;
     }
 }
 export default StartGameAction;

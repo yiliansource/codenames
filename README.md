@@ -1,13 +1,19 @@
 <center>
 
-# Codenames
+<h1>Codenames</h1>
 
-_A website to play the team-based word-guessing game by the same name._  
-_Playable at [codenames.yiliansource.dev](https://codenames.yiliansource.dev)!_
+<p>
+    <i>A website to play the team-based word-guessing game by the same name.</i><br>
+    <i>Playable at <a href="https://codenames.yiliansource.dev">codenames.yiliansource.dev</a>!</i>
+</p>
 
-Made in NodeJS using React, TypeScript and Socket&#46;IO.
+<p>Made in NodeJS using React, TypeScript and Socket.IO.</p>
 
-[Development](#development) | [Terminology](#terminology) | [Example Game](#example-game)
+<p>
+    <a href="#development">Development</a> |
+    <a href="#terminology">Terminology</a> |
+    <a href="#example-game">Example Game</a>
+</p>
 
 </center>
 
@@ -31,7 +37,7 @@ Development mode can be started via:
 gulp
 ```
 
-Production mode is done, after building, simply via:
+Production mode is started, after building, simply via:
 
 ```bash
 npm start

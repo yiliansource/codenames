@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import i18n from "../i18n";
-
 /**
  * The properties of the registration form.
  */
@@ -42,9 +40,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
     constructor(props: RegisterFormProps) {
         super(props);
 
-        this.state = {
-            name: props.defaultName || ''
-        };
+        this.state = { name: props.defaultName || '' };
     }
 
     /**
@@ -52,9 +48,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
      */
     onNameChange(name: string) {
         if (!this.state.isSubmitting) {
-            this.setState({
-                name: name
-            });
+            this.setState({ name: name });
         }
     }
 
@@ -71,21 +65,11 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
      * Attempts to submit the form.
      */
     submit() {
-        let messages: string[] = [];
         if (this.state.name.length < 3) {
-            messages.push("The username must be atleast 3 characters long.");
-        }
-
-        if (messages.length > 0) {
-            this.setState({
-                validationMessage: messages.join('<br>')
-            });
+            this.setState({ validationMessage: "The username must be atleast 3 characters long." });
         }
         else {
-            this.setState({
-                isSubmitting: true
-            });
-
+            this.setState({ isSubmitting: true });
             this.props.onSubmit(this.state.name);
         }
     }
@@ -124,7 +108,5 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
  */
 export function show(container: Element, onSubmit: (name: string) => void) {
     const urlParams = new URLSearchParams(window.location.search);
-    ReactDOM.render(<RegisterForm
-        defaultName={urlParams.get('name')}
-        onSubmit={onSubmit}/>, container);
+    ReactDOM.render(<RegisterForm defaultName={urlParams.get('name')} onSubmit={onSubmit}/>, container);
 }

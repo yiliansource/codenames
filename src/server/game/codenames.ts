@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import chalk from "chalk";
 
-import { GameState, TeamColour, GamePhase } from "./../../shared/codenames";
+import { GameState, TeamColour, GamePhase } from "../../shared/codenames";
 import * as actions from "./actionHandler";
 import * as instances from "./instanceManager";
 
