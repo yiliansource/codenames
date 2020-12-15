@@ -1,4 +1,4 @@
-<center>
+<div align="center">
 
 <h1>Codenames</h1>
 
@@ -15,7 +15,7 @@
     <a href="#example-game">Example Game</a>
 </p>
 
-</center>
+</div>
 
 ## Development
 
@@ -84,3 +84,7 @@ Then it's the other team's turn. this procedure is repeated until either an assa
 **Post-Game Phase**
 
 The winning team gains a scorepoint. The game master index is increased, which causes the next player of each team to become game master next round. Then a new round starts (pre-game phase!). This is repeated as long as desired.
+
+## License
+
+This project is licensed under a [MIT](./license.md) license.
