@@ -1,6 +1,8 @@
 export interface GameState {
     phase: GamePhase;
     players: Player[];
+    language: Language;
+    inTurn: TeamColour;
 
     cards?: Card[] | undefined;
     hint?: Hint | undefined;
@@ -14,7 +16,7 @@ export interface Player {
     isGameMaster?: boolean;
 }
 export interface Hint {
-    message: string;
+    word: string;
     amount: number;
 }
 export interface Card {
@@ -37,6 +39,10 @@ export const enum GamePhase {
     Lobby = "lobby",
     Round = "round",
     Over = "over"
+}
+export const enum Language {
+    German = "de",
+    English = "en"
 }
 export const enum CurrentAction {
 

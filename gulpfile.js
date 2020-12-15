@@ -1,5 +1,4 @@
 const gulp = require('gulp');
-const { createBigIntLiteral } = require('typescript');
 
 gulp.task('clean', function() {
     return require('del')('dist');
@@ -61,6 +60,10 @@ gulp.task('build:js', function() {
     return gulp.src("src/client/js/**/*.js")
         .pipe(gulp.dest("dist/client/js"));
 });
+gulp.task('build:static', function() {
+    return gulp.src("src/server/resources/**/*.*")
+        .pipe(gulp.dest("dist/server/resources"));
+});
 
 gulp.task('watch:styles', function(done) {
     gulp.watch('src/client/**/*.{scss,sass,css}', gulp.series('build:styles'));
@@ -79,7 +82,7 @@ gulp.task('watch:js', function(done) {
     done();
 });
 
-gulp.task('build', gulp.parallel('build:styles', 'build:ts', 'build:js', 'build:views'))
+gulp.task('build', gulp.parallel('build:styles', 'build:ts', 'build:js', 'build:views', 'build:static'))
 gulp.task('watch', gulp.parallel('watch:styles', 'watch:ts', 'watch:js', 'watch:views'));
 gulp.task('server', function(done) {
     var called = false;
@@ -92,17 +95,5 @@ gulp.task('server', function(done) {
             }
         });
 });
-gulp.task('browser-sync', function(done) {
-    require('browser-sync').init({
-        proxy: "localhost:3000",
-        port: 5000,
-        files: [
-            "dist/**/*.*"
-        ],
-        browser: "chrome",
-        notify: true
-    });
-    done();
-});
 
-gulp.task('default', gulp.series('clean', 'build', 'server', gulp.parallel('watch', 'browser-sync')));
+gulp.task('default', gulp.series('clean', 'build', 'server', 'watch'));

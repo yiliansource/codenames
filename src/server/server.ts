@@ -5,6 +5,7 @@ import layouts from "express-ejs-layouts";
 import { createServer } from "http";
 
 import * as game from "./game/game";
+import chalk from "chalk";
 
 const app = express();
 const http = createServer(app);
@@ -29,5 +30,5 @@ app.get('/game', (req, res) => {
 game.initialize(io);
 
 http.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+    console.log(chalk.white`The Codenames server is up and running at '${chalk.cyan.underline`http://localhost:${port}`}'!`);
 });

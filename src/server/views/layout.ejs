@@ -4,14 +4,21 @@
   <meta charset="UTF-8">
   <title>Codenames</title>
   <link rel="stylesheet" href="/css/style.css"/>
+
+  <!-- CDN Resources -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/2.0.6/velocity.min.js"></script>
 
+  <!-- Custom Page Styles -->
   <%- defineContent('styles') %>
 </head>
 <body class="min-h-screen overflow-hidden bg-gradient-to-br from-green-700 to-green-900">
+  <!-- Begin Page Body -->
   <%- body %>
+  <!-- End Page Body -->
 
   <script src="/js/site.js"></script>
+  <!-- Custom Page Script -->
   <%- defineContent('scripts') %>
 </body>
 </html>
