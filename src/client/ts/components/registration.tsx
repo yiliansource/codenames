@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Language } from '../../../shared/codenames';
+
+import i18n, { LangKey } from "../i18n";
 
 /**
  * The properties of the registration form.
@@ -10,9 +13,13 @@ export interface RegisterFormProps {
      */
     defaultName?: string;
     /**
+     * The default language that should be filled into the form.
+     */
+    defaultLanguage?: Language;
+    /**
      * The callback that should be applied on form submission.
      */
-    onSubmit: (name: string) => void;
+    onSubmit: (name: string, lang: Language) => void;
 }
 
 /**
@@ -23,6 +30,10 @@ export interface RegisterFormState {
      * The current name input in the form.
      */
     name: string;
+    /**
+     * The current language selection in the form.
+     */
+    language: Language;
     /**
      * The current validation message of the form.
      */
@@ -40,7 +51,10 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
     constructor(props: RegisterFormProps) {
         super(props);
 
-        this.state = { name: props.defaultName || '' };
+        this.state = { 
+            name: props.defaultName || '',
+            language: props.defaultLanguage || Language.English
+        };
     }
 
     /**
@@ -49,6 +63,12 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
     onNameChange(name: string) {
         if (!this.state.isSubmitting) {
             this.setState({ name: name });
+        }
+    }
+
+    onLanguageChange(lang: Language) {
+        if (!this.state.isSubmitting) {
+            this.setState({ language: lang });
         }
     }
 
@@ -66,11 +86,11 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
      */
     submit() {
         if (this.state.name.length < 3) {
-            this.setState({ validationMessage: "The username must be atleast 3 characters long." });
+            this.setState({ validationMessage: i18n.format(LangKey.RegistrationUsernameTooShort) });
         }
         else {
             this.setState({ isSubmitting: true });
-            this.props.onSubmit(this.state.name);
+            this.props.onSubmit(this.state.name, this.state.language);
         }
     }
 
@@ -83,20 +103,27 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
         let nameInput = <input className="block shadow-inner bg-gray-50 text-gray-800 py-1 px-3 rounded-full my-1 focus:outline-none ring-1 ring-gray-300"
             value={this.state.name} placeholder="Username" autoFocus onChange={e => this.onNameChange(e.target.value)} onKeyUp={this.handleEnter.bind(this)}/>
 
+        let languageSelect = <select className="block shadow-inner bg-gray-50 text-gray-800 py-1 px-3 rounded-full my-1 focus:outline-none ring-1 ring-gray-300"
+            value={this.state.language} onChange={e => this.onLanguageChange(e.target.value as Language)}>
+            <option value={Language.English}>English</option>
+            <option value={Language.German}>Deutsch</option>
+        </select>
+
         // Show an en- or disabled submission button, depending on whether the form is already being submitted or not.
         let playButton = this.state.isSubmitting
             ? <a className="mt-2 bg-gray-300 rounded-full text-white text-center font-bold py-1.5 transition cursor-wait focus:outline-none" tabIndex={-1}
-            >Play!</a>
+            >{i18n.format(LangKey.RegistrationSubmit)}</a>
             : <button className="mt-2 bg-green-400 rounded-full text-white text-center font-bold py-1.5 transition cursor-pointer focus:bg-green-500 hover:bg-green-500 focus:outline-none"
                 id="join" onClick={() => this.submit()}>Play!</button>
 
         return <div id="panel" className="relative m-auto">
             <div className="absolute rounded-xl shadow-lg inset-3 bg-gray-300 transform translate-y-5"></div>
             <div className="relative flex flex-col justify-items-center rounded-xl shadow-lg bg-gray-100 px-32 py-10">
-                <h1 className="text-3xl text-center font-bold mb-4">Play Codenames!</h1>
-                <p className="text-center mb-2">Enter a valid username and click Play!</p>
+                <h1 className="text-3xl text-center font-bold mb-4">{i18n.format(LangKey.RegistrationTitle)}</h1>
+                <p className="text-center mb-2">{i18n.format(LangKey.RegistrationMessage)}</p>
                 {validationMessage}
                 {nameInput}
+                {languageSelect}
                 {playButton}
             </div>
         </div>
@@ -106,7 +133,7 @@ export class RegisterForm extends React.Component<RegisterFormProps, RegisterFor
 /**
  * Shows the registration form inside the specified container, with a specified callback on submission.
  */
-export function show(container: Element, onSubmit: (name: string) => void) {
+export function show(container: Element, onSubmit: (name: string, lang: Language) => void) {
     const urlParams = new URLSearchParams(window.location.search);
     ReactDOM.render(<RegisterForm defaultName={urlParams.get('name')} onSubmit={onSubmit}/>, container);
 }

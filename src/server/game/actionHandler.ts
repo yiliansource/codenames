@@ -19,10 +19,13 @@ export interface GameAction {
      */
     name: string;
     /**
-     * Executes the action, using the specified contextual values and data.
-     * Returns true if the action was successful and posed impact on the game state.
+     * Returns true if the action can, in theory, be successfully completed.
      */
-    execute: (caller: Player, game: GameState, data: any) => boolean;
+    check: (caller: Player, game: GameState, data: any) => boolean;
+    /**
+     * Executes the action, using the specified contextual values and data.
+     */
+    execute: (caller: Player, game: GameState, data: any) => void;
 }
 
 /**
@@ -61,15 +64,13 @@ function executeAction(clientId: string, clientAction: ClientAction, onActionExe
     let player = instances.getPlayer(clientId);
     let game = instances.getGame();
 
-    if (gameAction == undefined)
-        throw new Error("An action was recieved on a socket, but the action '" + clientAction.action + "' was not found.");
-    if (player == undefined)
-        throw new Error("An action invokation was attempted, but a registered calling player instance could not be found.");
-    if (game == undefined)
-        throw new Error("A calling player was found, but the corresponding game instance was undefined.");
+    if (gameAction == undefined) throw new Error("An action was recieved on a socket, but the action '" + clientAction.action + "' was not found.");
+    if (player == undefined) throw new Error("An action invokation was attempted, but a registered calling player instance could not be found.");
+    if (game == undefined) throw new Error("A calling player was found, but the corresponding game instance was undefined.");
 
     try {
-        if (gameAction.execute(player, game, clientAction.data)) {
+        if (gameAction.check(player, game, clientAction.data)) {
+            gameAction.execute(player, game, clientAction.data);
             onActionExecuted(game);
         }
     }

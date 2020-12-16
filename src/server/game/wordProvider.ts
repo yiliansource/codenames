@@ -10,7 +10,8 @@ import { Language } from "../../shared/codenames";
 type WordLookup = { [lang in Language]? : string[] };
 
 const lookup = loadWords();
-console.log(chalk.green`${chalk.white(Object.keys(lookup).length)} word definition file(s) were loaded!`);
+let fileCount = Object.keys(lookup).length, wordCount = Object.values(lookup).reduce((acc, cur) => acc + (cur || []).length, 0);
+console.log(chalk.green`${chalk.white(fileCount)} word definition file(s) were loaded (${chalk.white(wordCount)} words total)!`);
 
 /**
  * Returns all potential words of the given language.

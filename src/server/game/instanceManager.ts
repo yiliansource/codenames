@@ -15,17 +15,22 @@ export function getGame(): GameState | undefined {
  * Creates a new game instance.
  * @param host The host of the game.
  */
-export function createGame(host: Player): GameState {
+export function createGame(host: Player, language: Language): GameState {
     if (getGame() != undefined) {
         throw new Error(`A game was already created.`);
     }
 
     // Create a new game with default settings. Don't bother adding the host to the players, that step is handled during registration.
     let state: GameState = {
+        round: -1,
+
         phase: GamePhase.Lobby,
-        language: Language.German,
         inTurn: TeamColour.White,
-        players: []
+        language: language,
+
+        players: [],
+        hintHistory: [],
+        winnerHistory: []
     }
 
     // Mark the host as host.
@@ -56,7 +61,7 @@ export function registerPlayer(socketId: string, name: string): Player {
         name: name,
         team: TeamColour.White
     };
-    player.toString = (): string => `${player.name} ${chalk.gray`(${player.id})`}`;
+    player.toString = (): string => (player.team !== TeamColour.White ? (player.team === TeamColour.Red ? chalk.red : chalk.blue) : chalk.white)`${player.name} ${chalk.gray`(${player.id})`}`;
     players.push(player);
 
     return player;

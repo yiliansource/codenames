@@ -2,6 +2,8 @@ import React, { FunctionComponent, useContext } from 'react';
 import { TeamColour, Player } from "../../../shared/codenames";
 import { UserContext } from "../client";
 
+import i18n, { LangKey } from '../i18n';
+
 /**
  * The properties for the lobby.
  */
@@ -29,23 +31,23 @@ export const LobbyComponent: FunctionComponent<LobbyProps> = ({ players, onStart
     return <div className="relative mx-16 my-8">
         <div className="absolute bg-gray-300 inset-3 rounded-lg transform translate-y-5 shadow-md"></div>
         <div className="relative bg-gray-100 rounded-lg py-6 px-10 shadow-md text-center">
-            <h1 className="font-bold mb-3 text-lg">Lobby</h1>
-            <p className="mb-1">Make sure both teams have at least <b>two</b> players.</p>
-            <p className="mb-4">Once you are ready, the host needs to press <b>Start</b>!</p>
+            <h1 className="font-bold mb-3 text-lg">{i18n.format(LangKey.LobbyTitle)}</h1>
+            <p className="mb-1" dangerouslySetInnerHTML={{ __html: i18n.format(LangKey.LobbyDescription1) }}></p>
+            <p className="mb-4" dangerouslySetInnerHTML={{ __html: i18n.format(LangKey.LobbyDescription2) }}></p>
 
             {   // If there are players missing in either team, prompt the necessary changes.
                 redTeam.length < 2 || blueTeam.length < 2
                     ? <div className="py-4 border-t border-gray-300">
-                        { redTeam.length < 2 ? <p><span className="text-red-500 font-bold">Red Team</span> is
-                            missing { 2 - redTeam.length } player(s).</p> : null }
-                        { blueTeam.length < 2 ? <p><span className="text-blue-500 font-bold">Blue Team</span> is
-                            missing { 2 - blueTeam.length } player(s).</p> : null }
+                        { redTeam.length < 2 ? <p><span className="text-red-500 font-bold">{i18n.format(LangKey.TeamRed)}</span>
+                            <span> {i18n.format(LangKey.LobbyMissing, 2 - redTeam.length)}</span></p> : null }
+                        { blueTeam.length < 2 ? <p><span className="text-blue-500 font-bold">{i18n.format(LangKey.TeamBlue)}</span>
+                            <span> {i18n.format(LangKey.LobbyMissing, 2 - blueTeam.length)}</span></p> : null }
                     </div>
                     // Otherwise display the start button (if the player is the host).
                     : (user.isHost
                         ? <div className="">
                             <a className="inline-block cursor-pointer px-10 py-2 rounded-full bg-green-400 text-white font-bold transition-colors hover:bg-green-500"
-                                onClick={() => onStart()}>Start!</a>
+                                onClick={() => onStart()}>{i18n.format(LangKey.LobbyStart)}</a>
                         </div> 
                         : null)
             }

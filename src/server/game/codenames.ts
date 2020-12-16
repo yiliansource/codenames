@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import chalk from "chalk";
 
-import { GameState, TeamColour, GamePhase } from "../../shared/codenames";
+import { GameState, TeamColour, GamePhase, Language } from "../../shared/codenames";
 import * as actions from "./actionHandler";
 import * as instances from "./instanceManager";
 
@@ -10,14 +10,14 @@ import * as instances from "./instanceManager";
  */
 export function initialize(io: Server) {
     io.on('connection', (client: Socket) => {
-        client.on('register', (name: string, callback: (state: GameState) => void) => {
+        client.on('register', (name: string, language: Language, callback: (state: GameState) => void) => {
             // Register the player into the system. Also, register all the actions onto his sockets.
             let player = instances.registerPlayer(client.id, name);
             actions.registerSocket(client, (game) => io.emit('game_state_updated', game));
-            console.log(chalk.green`${player} connected and was registered!`);
+            console.log(chalk.green`${player} ${chalk.cyan`[${language}]`} connected and was registered!`);
 
             // Place the player into the current game.
-            let game = instances.getGame() || instances.createGame(player);
+            let game = instances.getGame() || instances.createGame(player, language);
             if (game.phase == GamePhase.Lobby) {
                 game.players.push(player);
 
