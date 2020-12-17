@@ -1,31 +1,31 @@
 import React, { FunctionComponent, useContext } from 'react';
-import { GamePhase } from "../../../shared/codenames";
+import { GamePhase, TeamColour } from "../../../shared/codenames";
 import { GameContext, UserContext } from "../client";
 
 import i18n, { LangKey } from '../i18n';
 
-export interface PlayAgainProps {
-    onPlayAgain: () => void;
-}
-
 /**
  * Represents the lobby component.
  */
-export const PlayAgainComponent: FunctionComponent<PlayAgainProps> = ({ onPlayAgain }) => {
+export const PlayAgainComponent: FunctionComponent<{ onPlayAgain: () => void }> = ({ onPlayAgain }) => {
     const user = useContext(UserContext);
     const game = useContext(GameContext);
 
-    // TODO: Prompt non-hosts to ask the hosts to play again.
-
-    if (game.phase !== GamePhase.Over || !user.isHost) {
+    if (game.phase !== GamePhase.Over) {
         return null;
     }
 
+    let winnerIsRed = game.winnerHistory[game.winnerHistory.length - 1] === TeamColour.Red;
+
     return <div className="relative mx-auto">
         <div className="absolute bg-gray-300 rounded-lg shadow-md inset-3 transform translate-y-5"></div>
-        <div className="relative bg-gray-100 rounded-lg shadow-md px-8 py-4">
-            <a className="inline-block cursor-pointer px-10 py-2 rounded-full bg-green-400 text-white font-bold transition-colors hover:bg-green-500"
-                onClick={() => onPlayAgain()}>{i18n.format(LangKey.PlayAgain)}</a>
+        <div className="relative bg-gray-100 rounded-lg shadow-md px-8 py-4 text-center">
+            <p className="text-lg mb-2"><span className={"font-bold " + (winnerIsRed ? "text-red-500" : "text-blue-500")}>
+                {i18n.format(LangKey.Team)} {i18n.format(winnerIsRed ? LangKey.TeamRed : LangKey.TeamBlue)}</span> {i18n.format(LangKey.TeamHasWon)}</p>
+            { user.isHost
+                ? <a className="inline-block cursor-pointer px-10 py-2 my-2 rounded-full bg-green-400 text-white font-bold transition-colors hover:bg-green-500"
+                    onClick={() => onPlayAgain()}>{i18n.format(LangKey.PlayAgainButton)}</a>
+                : <p>{i18n.format(LangKey.PlayAgainRequest)}</p> }
         </div>
     </div>
 }

@@ -2,6 +2,7 @@
  * Represents the current state of the game.
  */
 export interface GameState {
+    id: string;
     /**
      * The index of the current round, starting at 0 for the first round.
      */
@@ -42,6 +43,14 @@ export interface GameState {
     winnerHistory: TeamColour[];
 }
 
+export interface JoinGameOptions {
+    name: string;
+    gameId: string;
+}
+export interface CreateGameOptions extends JoinGameOptions {
+    language: Language;
+}
+
 /**
  * Represents a player in an instance of the game.
  */
@@ -67,6 +76,10 @@ export interface Player {
      * Is the player a game master?
      */
     isGameMaster?: boolean;
+    /**
+     * Is the player disconnected and trying to reconnect?
+     */
+    isReconnecting?: boolean;
 }
 
 /**

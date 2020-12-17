@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { GameState, TeamColour, GamePhase, ClientAction, Player, Hint, Language } from "../../shared/codenames";
-import { CardGrid, CardComponent } from "./components/cards";
+import { GameState, TeamColour, GamePhase, ClientAction, Player, Hint, JoinGameOptions } from "../../shared/codenames";
+import { CardGrid } from "./components/cards";
 import { HintComponent } from "./components/hint";
 import { SolutionComponent } from "./components/solution";
 import { EndTurnComponent } from "./components/endTurn";
@@ -18,12 +18,35 @@ const container = document.getElementById("app");
 export const UserContext = React.createContext(undefined) as React.Context<Player>;
 export const GameContext = React.createContext(undefined) as React.Context<GameState>;
 
-registration.show(container, (name: string, lang: Language) => {
-    const socket = io("ws://localhost:3000", { transports: [ 'websocket' ] });
-    socket.emit('register', name, lang, (game: GameState) => {
-        i18n.loadLanguage(game.language);
-        ReactDOM.render(<Game state={game} socket={socket}/>, container);
+const performGameEntryAction = (event: string, options: JoinGameOptions) => {
+    const socket = io("/", { transports: [ 'websocket' ] });
+    const promise = new Promise<GameState>((resolve, reject) => {
+        // Attempt to create or join a game.
+        socket.emit(event, options, (result: GameState | string) => {
+            // If the result is a string, the server returned an error.
+            if (typeof result === "string") { reject(result); }
+            // Otherwise the result contains the current game state.
+            else {
+                const game = result as GameState;
+                // Initialize the language lookup according to the defined language of the game.
+                i18n.loadLanguage(game.language);
+                // Render the game component, using the received state.
+                ReactDOM.render(<Game state={game} socket={socket} />, container);
+                // Push the game ID into the URL, to allow quick joins via URL.
+                window.history.pushState({}, '', window.location.href.split('?')[0] + "?id=" + game.id);
+
+                // Tell the form that a valid game state was received.
+                resolve(game);
+            }
+        });
     });
+    return promise;
+}
+
+// Show the registration, using the designated callbacks.
+registration.show(container, {
+    onCreateGame: (options): Promise<GameState> => performGameEntryAction('createGame', options),
+    onJoinGame: (options): Promise<GameState> => performGameEntryAction('joinGame', options)
 });
 
 type GameProps = {

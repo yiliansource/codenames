@@ -90,6 +90,7 @@ export const enum LangKey {
     RegistrationSubmit = "registrationSubmit",
 
     LobbyTitle = "lobbyTitle",
+    LobbyGameId = "lobbyGameId",
     LobbyDescription1 = "lobbyDescription1",
     LobbyDescription2 = "lobbyDescription2",
     LobbyMissing = "lobbyMissing",
@@ -102,7 +103,9 @@ export const enum LangKey {
     HintPleaseWait = "hintPleaseWait",
 
     EndTurn = "endTurn",
-    PlayAgain = "playAgain",
+    TeamHasWon = "teamHasWon",
+    PlayAgainButton = "playAgainButton",
+    PlayAgainRequest = "playAgainRequest",
 
     Team = "team",
     TeamRed = "teamRed",
@@ -121,6 +124,7 @@ const definitions: { [lang in Language]: LanguageDefinition } = {
         registrationSubmit: "Spielen!",
 
         lobbyTitle: "Lobby",
+        lobbyGameId: "Andere Spieler können über den Code {0} beitreten!",
         lobbyDescription1: "Stellt sicher, dass jedes Team mindestens <b>zwei</b> Spieler hat.",
         lobbyDescription2: "Sobald ihr bereit seid, muss der Veranstalter auf <b>Start</b> drücken!",
         lobbyMissing: "hat noch {0} Spieler zu wenig.",
@@ -133,7 +137,9 @@ const definitions: { [lang in Language]: LanguageDefinition } = {
         hintPleaseWait: "Bitte wartet, während der Spielleiter sich einen Hinweis ausdenkt!",
 
         endTurn: "Zug beenden",
-        playAgain: "Nochmal spielen!",
+        teamHasWon: "hat das Spiel gewonnen!",
+        playAgainButton: "Nochmal spielen!",
+        playAgainRequest: "Bittet den Spielleiter ein neues Spiel zu starten!",
 
         team: "Team",
         teamRed: "Rot",
@@ -150,6 +156,7 @@ const definitions: { [lang in Language]: LanguageDefinition } = {
         registrationSubmit: "Play!",
 
         lobbyTitle: "Lobby",
+        lobbyGameId: "Other players can join via the code {0}!",
         lobbyDescription1: "Make sure both teams have at least <b>two</b> players.",
         lobbyDescription2: "Once you are ready, the host needs to press <b>Start</b>!",
         lobbyMissing: "is missing {0} player(s)!",
@@ -162,7 +169,9 @@ const definitions: { [lang in Language]: LanguageDefinition } = {
         hintPleaseWait: "Please wait while the game master chooses a hint.",
 
         endTurn: "End turn",
-        playAgain: "Play again!",
+        teamHasWon: "has won the game!",
+        playAgainButton: "Play again!",
+        playAgainRequest: "Ask the host to start a new game!",
 
         team: "Team",
         teamRed: "Red",

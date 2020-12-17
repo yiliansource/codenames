@@ -2,6 +2,8 @@ import chalk from "chalk";
 
 import { randomTeam, generateSolution } from "./solutionProvider";
 import { getWords } from "./wordProvider";
+import { createLogger } from "./gameLogger";
+import * as util from "./gameUtility";
 
 import { Card, GamePhase, GameState, Hint, Player, TeamColour } from "../../shared/codenames";
 
@@ -42,14 +44,15 @@ interface GameHandler {
 }
 
 export function createGameHandler(caller: Player, game: GameState): GameHandler {
+    const logger = createLogger(game);
     return {
         switchTeam: function(team: TeamColour) {
-            if (team != TeamColour.Red && team != TeamColour.Blue) {
+            if (!util.isProperTeam(team)) {
                 throw new Error(`Invalid team colour '${team}'.`);
             }
 
             caller.team = team;
-            console.log(chalk.white`${caller} switched to team ${team}.`);
+            logger.info(`${caller} switched to team ${util.formatTeamName(team)}.`);
         },
         startRound: function() {
             game.round++;
@@ -58,7 +61,7 @@ export function createGameHandler(caller: Player, game: GameState): GameHandler 
             game.hintHistory = [];
             
             const setGameMaster = (team: TeamColour) => {
-                game.players.filter(p => p.team === team).forEach((player, index, array) => {
+                util.getTeamPlayers(game.players, team).forEach((player, index, array) => {
                     player.isGameMaster = index == (game.round % array.length);
                 });
             }
@@ -71,44 +74,46 @@ export function createGameHandler(caller: Player, game: GameState): GameHandler 
 
             game.cards = words.map((word: string, index: number) => <Card>{ content: word, colour: solutions[index] });
             game.inTurn = startingTeam;
+
+            logger.info(`${caller} started a new round!`);
         },
         submitHint: function(hint: Hint) {
             game.hint = hint;
             game.hintHistory.push(hint);
             
-            console.log(chalk.green`${caller} submitted a hint: ${chalk.yellow(JSON.stringify(hint))}`);
+            logger.info(`${caller} submitted a hint: ${chalk.yellow(JSON.stringify(hint))}`);
         },
         revealCard: function(index: number) {
-            if (!game.cards) {
+            if (game.cards == undefined) {
                 throw new Error("An attempt to reveal a card was made, but no cards have been created yet.");
             }
 
-            console.log(chalk.white`${caller} revealed the card ${index} (${game.cards[index].content}).`);
+            logger.info(`${caller} revealed the card ${index} (${game.cards[index].content}).`);
 
             const card = game.cards[index];
             card.isConsumed = true;
 
             if (card.colour === TeamColour.Black) {
-                this.endGame(game.inTurn === TeamColour.Red ? TeamColour.Blue : TeamColour.Red);
-                console.log(chalk.red`   --> Card was an assassin. Team ${caller.team} lost.`);
+                this.endGame(util.otherTeam(caller.team));
+                logger.info(chalk.red`   --> Card was an assassin. Team ${util.formatTeamName(caller.team)} lost.`);
             }
             else if (caller.team !== card.colour) {
                 this.advanceTurn();
-                console.log(chalk.red`   --> Card was not ${caller.team}. Switching turn to the other team.`);
+                logger.info(chalk.red`   --> Card was not ${util.formatTeamName(caller.team)}. Switching turn to the other team.`);
             }
             else {
                 if (game.cards.filter(c => c.colour === caller.team).every(c => c.isConsumed)) {
                     this.endGame(caller.team);
-                    console.log(chalk.green`   --> Team ${caller.team} won by revealing all their cards!`);
+                    logger.info(chalk.green`   --> Team ${util.formatTeamName(caller.team)} won by revealing all their cards!`);
                 }
                 else {
-                    console.log(chalk.green`   --> Card was the same colour (${caller.team}), keep guessing!`);
+                    logger.info(chalk.green`   --> Card was the same colour (${util.formatTeamName(caller.team)}), keep guessing!`);
                 }
             }
         },
         advanceTurn: function() {
             game.hint = null;
-            game.inTurn = (game.inTurn === TeamColour.Red ? TeamColour.Blue : TeamColour.Red);
+            game.inTurn = util.otherTeam(game.inTurn);
         },
         endGame: function(winner: TeamColour) {
             game.phase = GamePhase.Over;

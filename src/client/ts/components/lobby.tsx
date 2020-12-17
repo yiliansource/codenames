@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { TeamColour, Player } from "../../../shared/codenames";
-import { UserContext } from "../client";
+import { GameContext, UserContext } from "../client";
 
 import i18n, { LangKey } from '../i18n';
 
@@ -22,8 +22,9 @@ export interface LobbyProps {
  * Represents the lobby component.
  */
 export const LobbyComponent: FunctionComponent<LobbyProps> = ({ players, onStart }) => {
-    // The user context contains the current user.
     const user = useContext(UserContext);
+    const game = useContext(GameContext);
+
     // Teams consist of players filtered by colour.
     let redTeam = players.filter(p => p.team == TeamColour.Red),
         blueTeam = players.filter(p => p.team == TeamColour.Blue);
@@ -31,7 +32,8 @@ export const LobbyComponent: FunctionComponent<LobbyProps> = ({ players, onStart
     return <div className="relative mx-16 my-8">
         <div className="absolute bg-gray-300 inset-3 rounded-lg transform translate-y-5 shadow-md"></div>
         <div className="relative bg-gray-100 rounded-lg py-6 px-10 shadow-md text-center">
-            <h1 className="font-bold mb-3 text-lg">{i18n.format(LangKey.LobbyTitle)}</h1>
+            <h1 className="font-bold mb-1 text-lg">{i18n.format(LangKey.LobbyTitle)}</h1>
+            <h2 className="mb-4" dangerouslySetInnerHTML={{ __html: i18n.format(LangKey.LobbyGameId, `<span class="font-mono">${game.id}</span>`) }}></h2>
             <p className="mb-1" dangerouslySetInnerHTML={{ __html: i18n.format(LangKey.LobbyDescription1) }}></p>
             <p className="mb-4" dangerouslySetInnerHTML={{ __html: i18n.format(LangKey.LobbyDescription2) }}></p>
 

@@ -1,47 +1,81 @@
 import { Server, Socket } from "socket.io";
 import chalk from "chalk";
 
-import { GameState, TeamColour, GamePhase, Language } from "../../shared/codenames";
 import * as actions from "./actionHandler";
-import * as instances from "./instanceManager";
+import * as players from "./playerProvider";
+import * as games from "./gameProvider";
+import * as util from "./gameUtility";
+import { createLogger } from "./gameLogger";
+
+import { GameState, CreateGameOptions, JoinGameOptions } from "../../shared/codenames";
 
 /**
  * Initializes the game (Codenames) functionality on the given Socket.IO server.
  */
 export function initialize(io: Server) {
     io.on('connection', (client: Socket) => {
-        client.on('register', (name: string, language: Language, callback: (state: GameState) => void) => {
-            // Register the player into the system. Also, register all the actions onto his sockets.
-            let player = instances.registerPlayer(client.id, name);
-            actions.registerSocket(client, (game) => io.emit('game_state_updated', game));
-            console.log(chalk.green`${player} ${chalk.cyan`[${language}]`} connected and was registered!`);
+        client.once('createGame', (options: CreateGameOptions, callback: (result: GameState | string) => void) => {
+            try {
+                let player = createPlayerOnSocket(client, io, options.name);
+                let game = games.createGame(options.gameId || util.randomGameId(), player, options.language);
 
-            // Place the player into the current game.
-            let game = instances.getGame() || instances.createGame(player, language);
-            if (game.phase == GamePhase.Lobby) {
-                game.players.push(player);
-
-                // The team colour is determined by the number of players in each team. It tries to balance out the players, preferring red over blue.
-                player.team = game.players.filter(p => p.team == TeamColour.Red).length <= game.players.filter(p => p.team == TeamColour.Blue).length
-                    ? TeamColour.Red : TeamColour.Blue;
-
-                // The callback tells the registered player that the registration was successful.
+                client.join(game.id);
                 callback(game);
-                
-                // Lastly, tell the other players that a new player is here (by simply passing the entire game state).
-                client.broadcast.emit('game_state_updated', game);
+            }
+            catch {
+                callback("Something went wrong while trying to create the game.");
             }
         });
-        client.on('disconnect', () => {
-            let player = instances.getPlayer(client.id);
-            if (player != undefined) {
-                console.log(chalk.red`${player} disconnected.`);
+        client.once('joinGame', (options: JoinGameOptions, callback: (result: GameState | string) => void) => {
+            try {
+                let player = createPlayerOnSocket(client, io, options.name);
+                let game = games.joinGame(options.gameId, player);
+
+                if (game == undefined) throw game;
+
+                client.join(game.id);
+                io.to(game.id).emit('game_state_updated', game);
+                callback(game);
             }
-            
-            // TODO: Properly handle disconnects.
-            //if (player != undefined && instances.unregisterPlayerId(player.id)) {
-            //    console.log(chalk.red`${player.name} (${chalk.gray(client.id)}) disconnected and was unregistered.`);
-            //}
+            catch {
+                callback("Something went wrong while trying to join the game.");
+            }
+        });
+
+        // Perform a basic attempt at reconnection, checking the player was already in a game previously.
+        (function() {
+            let player = players.getPlayer(client.id);
+            if (player != undefined) {
+                let game = games.getGameByPlayer(player);
+                if (game != undefined) {
+                    player.isReconnecting = false;
+                    client.emit('game_state_updated', games.getGameByPlayer(player));
+
+                    createLogger(game).info(`${player} reconnected.`);
+                }
+            }
+        })();
+
+        client.on('disconnect', () => {
+            let player = players.getPlayer(client.id);
+            if (player != undefined) {
+                let game = games.getGameByPlayer(player);
+                if (game != undefined) {
+                    player.isReconnecting = true;
+                    io.to(game.id).emit('game_state_updated', games.getGameByPlayer(player));
+
+                    createLogger(game).warn(`${player} disconnected.`);
+                }
+            }
         });
     });
+}
+
+function createPlayerOnSocket(socket: Socket, io: Server, name: string) {
+    let player = players.registerPlayer(socket.id, name);
+    actions.registerSocket(socket, (game) => io.to(game.id).emit('game_state_updated', game));
+
+    createLogger().info(chalk.green`${player} connected and was registered!`);
+
+    return player;
 }

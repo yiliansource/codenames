@@ -1,7 +1,6 @@
-import chalk from "chalk";
-
 import { GameAction } from "../actionHandler";
 import { createGameHandler } from "../gameHandler";
+import { createLogger } from "../gameLogger";
 
 import { GamePhase, GameState, Player } from "../../../shared/codenames";
 
@@ -12,7 +11,7 @@ const EndTurnAction: GameAction = {
     name: "endTurn",
     check: (caller: Player, game: GameState) => game.phase === GamePhase.Round && !caller.isGameMaster && caller.team === game.inTurn,
     execute: (caller: Player, game: GameState) => {
-        console.log(chalk.yellow`${caller} ended their team's turn.`);
+        createLogger(game).info(`${caller} ended their teams turn.`);
         createGameHandler(caller, game).advanceTurn();
     }
 }

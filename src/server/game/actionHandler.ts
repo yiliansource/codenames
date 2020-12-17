@@ -1,10 +1,13 @@
-import { Socket } from "socket.io";
 import fs from "fs";
 import path from "path";
+import chalk from "chalk";
+import { Socket } from "socket.io";
+
+import * as games from "./gameProvider";
+import * as players from "./playerProvider";
+import { createLogger } from "./gameLogger";
 
 import { GameState, Player, ClientAction } from "../../shared/codenames";
-import * as instances from "./instanceManager";
-import chalk from "chalk";
 
 // Load the possible actions once upon module import.
 const actions = loadActions();
@@ -61,21 +64,27 @@ function loadActions(): GameAction[] {
  */
 function executeAction(clientId: string, clientAction: ClientAction, onActionExecuted: (game: GameState) => void) {
     let gameAction = actions.find(ac => ac.name == clientAction.action);
-    let player = instances.getPlayer(clientId);
-    let game = instances.getGame();
+    if (gameAction == undefined) throw new Error(`An action was recieved on a socket, but the action '${clientAction.action}' was not found.`);
 
-    if (gameAction == undefined) throw new Error("An action was recieved on a socket, but the action '" + clientAction.action + "' was not found.");
-    if (player == undefined) throw new Error("An action invokation was attempted, but a registered calling player instance could not be found.");
+    let player = players.getPlayer(clientId);
+    if (player == undefined) throw new Error(`An action invokation was attempted, but a registered calling player instance (${clientId}) could not be found.`);
+
+    let game = games.getGameByPlayer(player);
     if (game == undefined) throw new Error("A calling player was found, but the corresponding game instance was undefined.");
+
+    const logger = createLogger(game);
 
     try {
         if (gameAction.check(player, game, clientAction.data)) {
             gameAction.execute(player, game, clientAction.data);
             onActionExecuted(game);
         }
+        else {
+            logger.error(`${player} attempted to perform the action ${chalk.yellow(clientAction.action)}, using data ${chalk.yellow(clientAction.data)}, but failed the check.`);
+        }
     }
     catch (err) {
-        console.error(chalk.red`Something went wrong while executing the action ${chalk.yellowBright(gameAction.name)} using data ${chalk.yellowBright(JSON.stringify(clientAction.data))}.`);
-        console.error(chalk.red`    (${err})`);
+        logger.error(`Something went wrong while executing the action ${chalk.yellowBright(gameAction.name)} using data ${chalk.yellowBright(JSON.stringify(clientAction.data))}.`
+            + `\r\n\t(${err})`);
     }
 }

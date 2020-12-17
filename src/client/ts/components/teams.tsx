@@ -57,7 +57,7 @@ export const TeamComponent: FunctionComponent<TeamProps> = ({ players, colour, o
 
             {/* Render the players. */}
             <ul className="block divide-y divide-gray-300 mt-4">
-                { players.map((p, i) => <li key={i} className={"px-4 py-1 " + (p.id === user.id ? "font-bold" : "")}>
+                { players.map((p, i) => <li key={i} className={"px-4 py-1 " + (p.id === user.id ? "font-bold" : "") + " " + (p.isReconnecting ? "opacity-40": "")}>
                     <span className="mr-1">{p.name}</span>
                     { p.isHost ? <i title={i18n.format(LangKey.Host)} className="ml-1 text-yellow-500 fas fa-crown"></i> : '' }
                     { p.isGameMaster ? <i title={i18n.format(LangKey.GameMaster)} className={"ml-1 fas fa-hat-wizard " + (isRedTeam ? "text-red-500" : "text-blue-500")}></i> : '' }
@@ -78,9 +78,9 @@ export const TeamComponent: FunctionComponent<TeamProps> = ({ players, colour, o
 
             {/* Render a list of hints that the team has used. */}
             { game.phase === GamePhase.Round && hints.length > 0
-                ? <ul className="block divide-y divide-gray-100 mt-5">
+                ? <ul className="block divide-y divide-gray-300 mt-5">
                     { hints.map((h, i) => <li key={i} className="px-4 text-gray-500">
-                        <span>{h.word}</span>, <span className="text-gray-300">{h.amount}</span>
+                        <span>{h.word}</span>, <span className="text-gray-400">{h.amount}</span>
                     </li>) }
                 </ul>
                 : null }
