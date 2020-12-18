@@ -84,11 +84,6 @@ class i18n {
 
 type LanguageDefinition = { [key in LangKey]?: string };
 export const enum LangKey {
-    RegistrationTitle = "registrationTitle",
-    RegistrationMessage = "registrationMessage",
-    RegistrationUsernameTooShort = "registrationUsernameTooShort",
-    RegistrationSubmit = "registrationSubmit",
-
     LobbyTitle = "lobbyTitle",
     LobbyGameId = "lobbyGameId",
     LobbyDescription1 = "lobbyDescription1",
@@ -117,69 +112,59 @@ export const enum LangKey {
 }
 
 const definitions: { [lang in Language]: LanguageDefinition } = {
-    "de": {
-        registrationTitle: "Spiele Codenames!",
-        registrationMessage: "Gib einen gültigen Nutzernamen ein und drücke auf Spielen!",
-        registrationUsernameTooShort: "Der Nutzername muss mindestens 3 Zeichen lang sein.",
-        registrationSubmit: "Spielen!",
+    [Language.German]: {
+        [LangKey.LobbyTitle]: "Lobby",
+        [LangKey.LobbyGameId]: "Andere Spieler können über den Code {0} beitreten!",
+        [LangKey.LobbyDescription1]: "Stellt sicher, dass jedes Team mindestens <b>zwei</b> Spieler hat.",
+        [LangKey.LobbyDescription2]: "Sobald ihr bereit seid, muss der Veranstalter auf <b>Start</b> drücken!",
+        [LangKey.LobbyMissing]: "hat noch {0} Spieler zu wenig.",
+        [LangKey.LobbyStart]: "Start!",
 
-        lobbyTitle: "Lobby",
-        lobbyGameId: "Andere Spieler können über den Code {0} beitreten!",
-        lobbyDescription1: "Stellt sicher, dass jedes Team mindestens <b>zwei</b> Spieler hat.",
-        lobbyDescription2: "Sobald ihr bereit seid, muss der Veranstalter auf <b>Start</b> drücken!",
-        lobbyMissing: "hat noch {0} Spieler zu wenig.",
-        lobbyStart: "Start!",
+        [LangKey.HintWord]: "Hinweis",
+        [LangKey.HintAmount]: "Wortanzahl",
+        [LangKey.HintIncludesCardWord]: "Der Hinweis darf keines der Wörter auf den Karten beinhalten.",
+        [LangKey.HintSubmit]: "Hinweis abschicken!",
+        [LangKey.HintPleaseWait]: "Bitte wartet, während der Spielleiter sich einen Hinweis ausdenkt!",
 
-        hintWord: "Hinweis",
-        hintAmount: "Wortanzahl",
-        hintIncludesCardWord: "Der Hinweis darf keines der Wörter auf den Karten beinhalten.",
-        hintSubmit: "Hinweis abschicken!",
-        hintPleaseWait: "Bitte wartet, während der Spielleiter sich einen Hinweis ausdenkt!",
+        [LangKey.EndTurn]: "Zug beenden",
+        [LangKey.TeamHasWon]: "hat das Spiel gewonnen!",
+        [LangKey.PlayAgainButton]: "Nochmal spielen!",
+        [LangKey.PlayAgainRequest]: "Bittet den Spielleiter ein neues Spiel zu starten!",
 
-        endTurn: "Zug beenden",
-        teamHasWon: "hat das Spiel gewonnen!",
-        playAgainButton: "Nochmal spielen!",
-        playAgainRequest: "Bittet den Spielleiter ein neues Spiel zu starten!",
+        [LangKey.Team]: "Team",
+        [LangKey.TeamRed]: "Rot",
+        [LangKey.TeamBlue]: "Blau",
+        [LangKey.TeamSwitch]: "Team wechseln",
 
-        team: "Team",
-        teamRed: "Rot",
-        teamBlue: "Blau",
-        teamSwitch: "Team wechseln",
-
-        gameMaster: "Spielleiter",
-        host: "Veranstalter"
+        [LangKey.GameMaster]: "Spielleiter",
+        [LangKey.Host]: "Veranstalter"
     },
-    "en": {
-        registrationTitle: "Play Codenames!",
-        registrationMessage: "Enter a valid username and click Play!",
-        registrationUsernameTooShort: "The username must be atleast 3 characters long.",
-        registrationSubmit: "Play!",
+    [Language.English]: {
+        [LangKey.LobbyTitle]: "Lobby",
+        [LangKey.LobbyGameId]: "Other players can join via the code {0}!",
+        [LangKey.LobbyDescription1]: "Make sure both teams have at least <b>two</b> players.",
+        [LangKey.LobbyDescription2]: "Once you are ready, the host needs to press <b>Start</b>!",
+        [LangKey.LobbyMissing]: "is missing {0} player(s)!",
+        [LangKey.LobbyStart]: "Start!",
 
-        lobbyTitle: "Lobby",
-        lobbyGameId: "Other players can join via the code {0}!",
-        lobbyDescription1: "Make sure both teams have at least <b>two</b> players.",
-        lobbyDescription2: "Once you are ready, the host needs to press <b>Start</b>!",
-        lobbyMissing: "is missing {0} player(s)!",
-        lobbyStart: "Start!",
+        [LangKey.HintWord]: "Hint Word",
+        [LangKey.HintAmount]: "Amount",
+        [LangKey.HintIncludesCardWord]: "The word may not include any word on the cards.",
+        [LangKey.HintSubmit]: "Submit Hint!",
+        [LangKey.HintPleaseWait]: "Please wait while the game master chooses a hint.",
 
-        hintWord: "Hint Word",
-        hintAmount: "Amount",
-        hintIncludesCardWord: "The word may not include any word on the cards.",
-        hintSubmit: "Submit Hint!",
-        hintPleaseWait: "Please wait while the game master chooses a hint.",
+        [LangKey.EndTurn]: "End turn",
+        [LangKey.TeamHasWon]: "has won the game!",
+        [LangKey.PlayAgainButton]: "Play again!",
+        [LangKey.PlayAgainRequest]: "Ask the host to start a new game!",
 
-        endTurn: "End turn",
-        teamHasWon: "has won the game!",
-        playAgainButton: "Play again!",
-        playAgainRequest: "Ask the host to start a new game!",
+        [LangKey.Team]: "Team",
+        [LangKey.TeamRed]: "Red",
+        [LangKey.TeamBlue]: "Blue",
+        [LangKey.TeamSwitch]: "Switch team",
 
-        team: "Team",
-        teamRed: "Red",
-        teamBlue: "Blue",
-        teamSwitch: "Switch team",
-
-        gameMaster: "Game Master",
-        host: "Host"
+        [LangKey.GameMaster]: "Game Master",
+        [LangKey.Host]: "Host"
     }
 }
 
