@@ -1,3 +1,4 @@
+require('dotenv').config();
 const gulp = require('gulp');
 
 gulp.task('clean', function() {

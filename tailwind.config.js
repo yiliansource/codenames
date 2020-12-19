@@ -1,17 +1,9 @@
 module.exports = {
   purge: {
+    // Tailwind will automatically purge when NODE_ENV is set to 'production'.
     content: [
-      "./dist/**/*.ejs",
-      "./dist/**/*.js",
+      "./src/**/*.ejs",
       "./src/**/*.tsx"
     ]
-  },
-  darkMode: false, // or 'media' or 'class'
-  theme: {
-    extend: {},
-  },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
+  }
 }

@@ -6,8 +6,9 @@
         "sourceMap": true,
         "strict": true,
         "esModuleInterop": true,
-        //"noImplicitAny": true,
-        //"strictNullChecks": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
         "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true
     }
 }
