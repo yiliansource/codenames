@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { TeamColour, Player } from "../../../shared/codenames";
 import { GameContext, UserContext } from "../client";
-import { formatTeam } from '../formatting';
+import { formatPlayer, formatTeam } from '../formatting';
 
 import i18n, { LangKey } from '../i18n';
 
@@ -36,7 +36,7 @@ export const LobbyComponent: FunctionComponent<LobbyProps> = ({ players, onStart
             <h1 className="font-bold mb-1 text-lg">{i18n.formatHtml(LangKey.LobbyTitle)}</h1>
             <h2 className="mb-4">{i18n.formatHtml(LangKey.LobbyGameId, game.id)}</h2>
             <p className="mb-1">{i18n.formatHtml(LangKey.LobbyDescription1)}</p>
-            <p className="mb-4">{i18n.formatHtml(LangKey.LobbyDescription2)}</p>
+            <p className="mb-4">{i18n.formatHtml(LangKey.LobbyDescription2, formatPlayer(players.find(p => p.isHost)))}</p>
 
             {   // If there are players missing in either team, prompt the necessary changes.
                 redTeam.length < 2 || blueTeam.length < 2

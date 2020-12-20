@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { GamePhase, TeamColour } from "../../../shared/codenames";
 import { GameContext, UserContext } from "../client";
-import { formatTeam } from '../formatting';
+import { formatPlayer, formatTeam } from '../formatting';
 
 import i18n, { LangKey } from '../i18n';
 
@@ -25,7 +25,7 @@ export const PlayAgainComponent: FunctionComponent<{ onPlayAgain: () => void }> 
             { user.isHost
                 ? <a className="inline-block cursor-pointer px-10 py-2 my-2 rounded-full bg-green-400 text-white font-bold transition-colors hover:bg-green-500"
                     onClick={() => onPlayAgain()}>{i18n.format(LangKey.PlayAgainButton)}</a>
-                : <p>{i18n.formatHtml(LangKey.PlayAgainRequest)}</p> }
+                : <p>{i18n.formatHtml(LangKey.PlayAgainRequest, formatPlayer(game.players.find(p => p.isHost)))}</p> }
         </div>
     </div>
 }

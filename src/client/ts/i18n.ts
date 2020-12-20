@@ -138,7 +138,7 @@ const definitions: { [lang in Language]: LanguageDefinition } = {
         lobbyTitle: "Lobby",
         lobbyGameId: 'Andere Spieler können über den Code <span class="font-mono">{0}</span> beitreten!',
         lobbyDescription1: "Stellt sicher, dass jedes Team mindestens <b>zwei</b> Spieler hat.",
-        lobbyDescription2: "Sobald ihr bereit seid, muss der Veranstalter auf <b>Start</b> drücken!",
+        lobbyDescription2: "Sobald ihr bereit seid, muss der Veranstalter ({0}) auf <b>Start</b> drücken!",
         lobbyMissing: "{team} hat noch {missing} Spieler zu wenig.",
         lobbyStart: "Start!",
 
@@ -146,12 +146,12 @@ const definitions: { [lang in Language]: LanguageDefinition } = {
         hintAmount: "Wortanzahl",
         hintIncludesCardWord: "Der Hinweis darf keines der Wörter auf den Karten beinhalten.",
         hintSubmit: "Hinweis abschicken!",
-        hintPleaseWait: "Bitte wartet, während der Spielleiter sich einen Hinweis ausdenkt!",
+        hintPleaseWait: "Bitte wartet, während der Spielleiter ({0}) sich einen Hinweis ausdenkt!",
 
         endTurn: "Zug beenden",
         teamHasWon: "{0} hat das Spiel gewonnen!",
         playAgainButton: "Nochmal spielen!",
-        playAgainRequest: "Bittet den Spielleiter ein neues Spiel zu starten!",
+        playAgainRequest: "Bittet den Spielleiter ({0}) ein neues Spiel zu starten!",
 
         teamRed: "Team Rot",
         teamBlue: "Team Blau",
@@ -169,7 +169,7 @@ const definitions: { [lang in Language]: LanguageDefinition } = {
         lobbyTitle: "Lobby",
         lobbyGameId: 'Other players can join via the code <span class="font-mono">{0}</span>!',
         lobbyDescription1: "Make sure both teams have at least <b>two</b> players.",
-        lobbyDescription2: "Once you are ready, the host needs to press <b>Start</b>!",
+        lobbyDescription2: "Once you are ready, the host ({0}) needs to press <b>Start</b>!",
         lobbyMissing: "{team} is missing {missing} player(s)!",
         lobbyStart: "Start!",
 
@@ -177,12 +177,12 @@ const definitions: { [lang in Language]: LanguageDefinition } = {
         hintAmount: "Amount",
         hintIncludesCardWord: "The word may not include any word on the cards.",
         hintSubmit: "Submit Hint!",
-        hintPleaseWait: "Please wait while the game master chooses a hint.",
+        hintPleaseWait: "Please wait while the game master ({0}) is choosing a hint.",
 
         endTurn: "End turn",
         teamHasWon: "{0} has won the game!",
         playAgainButton: "Play again!",
-        playAgainRequest: "Ask the host to start a new game!",
+        playAgainRequest: "Ask the host ({0}) to start a new game!",
 
         teamRed: "Team Red",
         teamBlue: "Team Blue",

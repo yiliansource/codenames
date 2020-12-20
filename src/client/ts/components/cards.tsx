@@ -2,6 +2,8 @@ import React, { FunctionComponent, MouseEvent, useContext } from 'react';
 import { Card, TeamColour } from "../../../shared/codenames";
 import { UserContext, GameContext } from "../client";
 
+import { getSolutionColour } from "./solution";
+
 /**
  * The properties for the card grid component.
  */
@@ -60,11 +62,15 @@ export const CardComponent: FunctionComponent<CardProps> = ({ card, onClick }) =
     }
 
     // Consumed cards do not normally display their content, only when hovered.
-    return <div className="relative">
+    return <div className="relative transform transition-transform hover:scale-110">
         <div className={"absolute rounded-lg shadow-md inset-2 transform translate-y-3 transition-colors " + underlayColour}></div>
         <div className={"relative rounded-lg shadow-md transition-colors " + backgroundColour + (!card.isConsumed ? " hover:bg-gray-200" : "")} onClick={onClick}>
+            { user.isGameMaster && !card.isConsumed ?
+                <div className={"absolute w-4 h-4 top-2 left-2 rounded-full shadow-inner pointer-events-none " + getSolutionColour(card.colour)}></div> 
+                : null }
+
             <div className={"px-4 2xl:px-8 py-8 text-center " + (card.isConsumed ? "transition-opacity opacity-0 hover:opacity-60" : "cursor-pointer") + " "
-                + (game.inTurn !== user.team || user.isGameMaster ? "cursor-not-allowed" : '')}>
+                + (game.inTurn === user.team && !!game.hint && !user.isGameMaster ? '' : 'cursor-not-allowed')}>
                 <p className="text-base 2xl:text-lg font-semibold text-gray-800 ">{card.content}</p>
             </div>
         </div>
