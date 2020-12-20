@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Language } from "../../shared/codenames";
 
 /**
@@ -45,15 +47,15 @@ class i18n {
     }
 
     /**
-     * Formats the specified language entry using the specified arguments. 
+     * Formats the specified language entry using the specified arguments.
      * Arguments are sequentially consumed and replace text in the format '{index}' in the entry.
      */
     format(key: LangKey, ...args: any[]): string;
     /**
-     * Formats the specified language entry using the specified arguments. 
+     * Formats the specified language entry using the specified arguments.
      * Allows the usage of named arguments, which replace text in the format '{name}' in the entry. 
      */
-    format(key: LangKey, args?: undefined | any[] | { [key: string]: any }): string {
+    format(key: LangKey, args?: any[] | { [key: string]: any }): string {
         if (this.definition == undefined) {
             throw new Error("Language key formatting failed, no language loaded.");
         }
@@ -79,6 +81,17 @@ class i18n {
         }
 
         return entry;
+    }
+
+    /**
+     *  Formats the specified language entry using the specified arguments and returns the result as a React element.
+     */
+    formatHtml(key: LangKey, ...args: any[]): React.ReactElement;
+    /**
+     * Formats the specified language entry using the specified arguments and returns the result as a React element.
+     */
+    formatHtml(key: LangKey, args?: any[] | { [key: string]: any }): React.ReactElement {
+        return React.createElement("span", { dangerouslySetInnerHTML: { __html: this.format(key, args) }, className: "i18n-generated" });
     }
 }
 
@@ -107,7 +120,6 @@ export const enum LangKey {
     PlayAgainButton = "playAgainButton",
     PlayAgainRequest = "playAgainRequest",
 
-    Team = "team",
     TeamRed = "teamRed",
     TeamBlue = "teamBlue",
     TeamSwitch = "teamSwitch",
@@ -119,15 +131,15 @@ export const enum LangKey {
 const definitions: { [lang in Language]: LanguageDefinition } = {
     "de": {
         registrationTitle: "Spiele Codenames!",
-        registrationMessage: "Gib einen gültigen Nutzernamen ein und drücke auf Spielen!",
+        registrationMessage: "Gib einen gültigen Nutzernamen ein und drücke auf <b>Spielen</b>!",
         registrationUsernameTooShort: "Der Nutzername muss mindestens 3 Zeichen lang sein.",
         registrationSubmit: "Spielen!",
 
         lobbyTitle: "Lobby",
-        lobbyGameId: "Andere Spieler können über den Code {0} beitreten!",
+        lobbyGameId: 'Andere Spieler können über den Code <span class="font-mono">{0}</span> beitreten!',
         lobbyDescription1: "Stellt sicher, dass jedes Team mindestens <b>zwei</b> Spieler hat.",
         lobbyDescription2: "Sobald ihr bereit seid, muss der Veranstalter auf <b>Start</b> drücken!",
-        lobbyMissing: "hat noch {0} Spieler zu wenig.",
+        lobbyMissing: "{team} hat noch {missing} Spieler zu wenig.",
         lobbyStart: "Start!",
 
         hintWord: "Hinweis",
@@ -137,13 +149,12 @@ const definitions: { [lang in Language]: LanguageDefinition } = {
         hintPleaseWait: "Bitte wartet, während der Spielleiter sich einen Hinweis ausdenkt!",
 
         endTurn: "Zug beenden",
-        teamHasWon: "hat das Spiel gewonnen!",
+        teamHasWon: "{0} hat das Spiel gewonnen!",
         playAgainButton: "Nochmal spielen!",
         playAgainRequest: "Bittet den Spielleiter ein neues Spiel zu starten!",
 
-        team: "Team",
-        teamRed: "Rot",
-        teamBlue: "Blau",
+        teamRed: "Team Rot",
+        teamBlue: "Team Blau",
         teamSwitch: "Team wechseln",
 
         gameMaster: "Spielleiter",
@@ -151,15 +162,15 @@ const definitions: { [lang in Language]: LanguageDefinition } = {
     },
     "en": {
         registrationTitle: "Play Codenames!",
-        registrationMessage: "Enter a valid username and click Play!",
+        registrationMessage: "Enter a valid username and click <b>Play!</b>",
         registrationUsernameTooShort: "The username must be atleast 3 characters long.",
         registrationSubmit: "Play!",
 
         lobbyTitle: "Lobby",
-        lobbyGameId: "Other players can join via the code {0}!",
+        lobbyGameId: 'Other players can join via the code <span class="font-mono">{0}</span>!',
         lobbyDescription1: "Make sure both teams have at least <b>two</b> players.",
         lobbyDescription2: "Once you are ready, the host needs to press <b>Start</b>!",
-        lobbyMissing: "is missing {0} player(s)!",
+        lobbyMissing: "{team} is missing {missing} player(s)!",
         lobbyStart: "Start!",
 
         hintWord: "Hint Word",
@@ -169,13 +180,12 @@ const definitions: { [lang in Language]: LanguageDefinition } = {
         hintPleaseWait: "Please wait while the game master chooses a hint.",
 
         endTurn: "End turn",
-        teamHasWon: "has won the game!",
+        teamHasWon: "{0} has won the game!",
         playAgainButton: "Play again!",
         playAgainRequest: "Ask the host to start a new game!",
 
-        team: "Team",
-        teamRed: "Red",
-        teamBlue: "Blue",
+        teamRed: "Team Red",
+        teamBlue: "Team Blue",
         teamSwitch: "Switch team",
 
         gameMaster: "Game Master",

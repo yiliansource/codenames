@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useContext } from 'react';
 import { TeamColour, Player, GamePhase } from "../../../shared/codenames";
 import { GameContext, UserContext } from "../client";
+import { formatTeam } from '../formatting';
 
 import i18n, { LangKey } from "../i18n";
 
@@ -41,9 +42,7 @@ export const TeamComponent: FunctionComponent<TeamProps> = ({ players, colour, o
     return <div className={"relative m-auto transition-opacity " + (game.phase !== GamePhase.Round || game.inTurn === colour ? "opacity-100" : "opacity-50")}>
         <div className={"absolute rounded-lg shadow-md inset-2 transform translate-y-3 " + (isRedTeam ? "bg-red-400" : "bg-blue-400")}></div>
         <div style={{ minWidth: "14rem" }} className="relative rounded-lg shadow-md bg-gray-100 px-8 py-8">
-            <h1 className={"text-center font-bold " + (isRedTeam ? "text-red-500" : "text-blue-500")}>
-                {i18n.format(LangKey.Team)} {i18n.format(isRedTeam ? LangKey.TeamRed : LangKey.TeamBlue)}
-            </h1>
+            <h1 className="text-center" dangerouslySetInnerHTML={{ __html: formatTeam(colour) }}></h1>
             
             {/* Render a trophy for each victory the team has achieved. */}
             { roundsWon > 0

@@ -121,7 +121,7 @@ export class HintComponent extends React.Component<HintProps, HintState> {
                             <span className="font-bold">{this.props.hint.word}</span>,&nbsp;
                             <span className="text-gray-600">{this.props.hint.amount}</span>
                         </p>
-                        : <p>{i18n.format(LangKey.HintPleaseWait)}</p> }
+                        : <p>{i18n.formatHtml(LangKey.HintPleaseWait)}</p> }
                 </div>
             </div>
         }
