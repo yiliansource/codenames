@@ -49,6 +49,11 @@ registration.show(container, {
     onJoinGame: (options): Promise<GameState> => performGameEntryAction('joinGame', options)
 });
 
+// Ensure that the user needs to confirm navigation away from the page.
+window.onbeforeunload = function(e) {
+    return true;
+}
+
 type GameProps = {
     state: GameState;
     socket: SocketIOClient.Socket;

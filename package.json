@@ -1,6 +1,6 @@
 {
   "name": "codenames",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "An online word-guessing game, written with TypeScript as an ExpressJS application using Socket.IO websockets.",
   "main": "./dist/server/server.js",
   "scripts": {

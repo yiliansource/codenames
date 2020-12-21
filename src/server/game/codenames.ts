@@ -61,10 +61,20 @@ export function initialize(io: Server) {
             if (player != undefined) {
                 let game = games.getGameByPlayer(player);
                 if (game != undefined) {
-                    player.isReconnecting = true;
-                    io.to(game.id).emit('game_state_updated', games.getGameByPlayer(player));
+                    let logger = createLogger(game);
 
-                    createLogger(game).warn(`${player} disconnected.`);
+                    player.isReconnecting = true;
+                    logger.warn(`${player} disconnected.`);
+
+                    if (game.players.every(p => p.isReconnecting)) {
+                        // All players have disconnected, we can delete the game.
+                        games.deleteGame(game.id);
+                        logger.warn("All players have left the game, deleting the room.");
+                    }
+                    else {
+                        io.to(game.id).emit('game_state_updated', games.getGameByPlayer(player));
+                    }
+
                 }
             }
         });

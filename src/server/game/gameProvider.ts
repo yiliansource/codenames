@@ -69,3 +69,14 @@ export function joinGame(id: string, player: Player): GameState | undefined {
     }
     return game;
 }
+
+export function deleteGame(id: string): boolean {
+    let game = getGame(id);
+    if (game != undefined) {
+        // Delete all player lookup entries, removing the link from the socket ID to the game.
+        for (let player of game.players) { delete playerGameLookup[player.id]; }        
+        // Delete the game.
+        games.splice(games.indexOf(game), 1);
+    }
+    return false;
+}
