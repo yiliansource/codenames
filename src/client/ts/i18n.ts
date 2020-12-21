@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Language } from "../../shared/codenames";
 
 /**
@@ -45,15 +47,15 @@ class i18n {
     }
 
     /**
-     * Formats the specified language entry using the specified arguments. 
+     * Formats the specified language entry using the specified arguments.
      * Arguments are sequentially consumed and replace text in the format '{index}' in the entry.
      */
     format(key: LangKey, ...args: any[]): string;
     /**
-     * Formats the specified language entry using the specified arguments. 
+     * Formats the specified language entry using the specified arguments.
      * Allows the usage of named arguments, which replace text in the format '{name}' in the entry. 
      */
-    format(key: LangKey, args?: undefined | any[] | { [key: string]: any }): string {
+    format(key: LangKey, args?: any[] | { [key: string]: any }): string {
         if (this.definition == undefined) {
             throw new Error("Language key formatting failed, no language loaded.");
         }
@@ -80,6 +82,17 @@ class i18n {
 
         return entry;
     }
+
+    /**
+     *  Formats the specified language entry using the specified arguments and returns the result as a React element.
+     */
+    formatHtml(key: LangKey, ...args: any[]): React.ReactElement;
+    /**
+     * Formats the specified language entry using the specified arguments and returns the result as a React element.
+     */
+    formatHtml(key: LangKey, args?: any[] | { [key: string]: any }): React.ReactElement {
+        return React.createElement("span", { dangerouslySetInnerHTML: { __html: this.format(key, args) }, className: "i18n-generated" });
+    }
 }
 
 type LanguageDefinition = { [key in LangKey]?: string };
@@ -102,7 +115,6 @@ export const enum LangKey {
     PlayAgainButton = "playAgainButton",
     PlayAgainRequest = "playAgainRequest",
 
-    Team = "team",
     TeamRed = "teamRed",
     TeamBlue = "teamBlue",
     TeamSwitch = "teamSwitch",
@@ -114,26 +126,25 @@ export const enum LangKey {
 const definitions: { [lang in Language]: LanguageDefinition } = {
     [Language.German]: {
         [LangKey.LobbyTitle]: "Lobby",
-        [LangKey.LobbyGameId]: "Andere Spieler können über den Code {0} beitreten!",
+        [LangKey.LobbyGameId]: 'Andere Spieler können über den Code <span class="font-mono">{0}</span> beitreten!',
         [LangKey.LobbyDescription1]: "Stellt sicher, dass jedes Team mindestens <b>zwei</b> Spieler hat.",
-        [LangKey.LobbyDescription2]: "Sobald ihr bereit seid, muss der Veranstalter auf <b>Start</b> drücken!",
-        [LangKey.LobbyMissing]: "hat noch {0} Spieler zu wenig.",
+        [LangKey.LobbyDescription2]: "Sobald ihr bereit seid, muss der Veranstalter ({0}) auf <b>Start</b> drücken!",
+        [LangKey.LobbyMissing]: "{team} hat noch {missing} Spieler zu wenig.",
         [LangKey.LobbyStart]: "Start!",
 
         [LangKey.HintWord]: "Hinweis",
         [LangKey.HintAmount]: "Wortanzahl",
         [LangKey.HintIncludesCardWord]: "Der Hinweis darf keines der Wörter auf den Karten beinhalten.",
         [LangKey.HintSubmit]: "Hinweis abschicken!",
-        [LangKey.HintPleaseWait]: "Bitte wartet, während der Spielleiter sich einen Hinweis ausdenkt!",
+        [LangKey.HintPleaseWait]: "Bitte wartet, während der Spielleiter ({0}) sich einen Hinweis ausdenkt!",
 
         [LangKey.EndTurn]: "Zug beenden",
-        [LangKey.TeamHasWon]: "hat das Spiel gewonnen!",
+        [LangKey.TeamHasWon]: "{0} hat das Spiel gewonnen!",
         [LangKey.PlayAgainButton]: "Nochmal spielen!",
-        [LangKey.PlayAgainRequest]: "Bittet den Spielleiter ein neues Spiel zu starten!",
+        [LangKey.PlayAgainRequest]: "Bittet den Spielleiter ({0}) ein neues Spiel zu starten!",
 
-        [LangKey.Team]: "Team",
-        [LangKey.TeamRed]: "Rot",
-        [LangKey.TeamBlue]: "Blau",
+        [LangKey.TeamRed]: "Team Rot",
+        [LangKey.TeamBlue]: "Team Blau",
         [LangKey.TeamSwitch]: "Team wechseln",
 
         [LangKey.GameMaster]: "Spielleiter",
@@ -141,26 +152,25 @@ const definitions: { [lang in Language]: LanguageDefinition } = {
     },
     [Language.English]: {
         [LangKey.LobbyTitle]: "Lobby",
-        [LangKey.LobbyGameId]: "Other players can join via the code {0}!",
+        [LangKey.LobbyGameId]: 'Other players can join via the code <span class="font-mono">{0}</span>!',
         [LangKey.LobbyDescription1]: "Make sure both teams have at least <b>two</b> players.",
-        [LangKey.LobbyDescription2]: "Once you are ready, the host needs to press <b>Start</b>!",
-        [LangKey.LobbyMissing]: "is missing {0} player(s)!",
+        [LangKey.LobbyDescription2]: "Once you are ready, the host ({0}) needs to press <b>Start</b>!",
+        [LangKey.LobbyMissing]: "{team} is missing {missing} player(s)!",
         [LangKey.LobbyStart]: "Start!",
 
         [LangKey.HintWord]: "Hint Word",
         [LangKey.HintAmount]: "Amount",
         [LangKey.HintIncludesCardWord]: "The word may not include any word on the cards.",
         [LangKey.HintSubmit]: "Submit Hint!",
-        [LangKey.HintPleaseWait]: "Please wait while the game master chooses a hint.",
+        [LangKey.HintPleaseWait]: "Please wait while the game master ({0}) is choosing a hint.",
 
         [LangKey.EndTurn]: "End turn",
-        [LangKey.TeamHasWon]: "has won the game!",
+        [LangKey.TeamHasWon]: "{0} has won the game!",
         [LangKey.PlayAgainButton]: "Play again!",
-        [LangKey.PlayAgainRequest]: "Ask the host to start a new game!",
+        [LangKey.PlayAgainRequest]: "Ask the host ({0}) to start a new game!",
 
-        [LangKey.Team]: "Team",
-        [LangKey.TeamRed]: "Red",
-        [LangKey.TeamBlue]: "Blue",
+        [LangKey.TeamRed]: "Team Red",
+        [LangKey.TeamBlue]: "Team Blue",
         [LangKey.TeamSwitch]: "Switch team",
 
         [LangKey.GameMaster]: "Game Master",

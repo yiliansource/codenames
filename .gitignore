@@ -13,9 +13,6 @@ logs
 results
 tmp
 
-# Build
-public/css/main.css
-
 # Coverage reports
 coverage
 
@@ -36,6 +33,9 @@ Thumbs.db
 
 # Ignore built ts files
 dist
+
+# Playtesting files
+playtesting
 
 # ignore yarn.lock
 yarn.lock

@@ -98,8 +98,15 @@ export function createGameHandler(caller: Player, game: GameState): GameHandler 
                 logger.info(chalk.red`   --> Card was an assassin. Team ${util.formatTeamName(caller.team)} lost.`);
             }
             else if (caller.team !== card.colour) {
-                this.advanceTurn();
-                logger.info(chalk.red`   --> Card was not ${util.formatTeamName(caller.team)}. Switching turn to the other team.`);
+                let otherTeam = util.otherTeam(caller.team);
+                if (card.colour === otherTeam && game.cards.filter(c => c.colour === otherTeam).every(c => c.isConsumed)) {
+                    this.endGame(otherTeam);
+                    logger.info(chalk.red`   --> Card was not ${util.formatTeamName(caller.team)}, it was the last card of the other team. They won!`);
+                }
+                else {
+                    this.advanceTurn();
+                    logger.info(chalk.red`   --> Card was not ${util.formatTeamName(caller.team)}. Switching turn to the other team.`);
+                }
             }
             else {
                 if (game.cards.filter(c => c.colour === caller.team).every(c => c.isConsumed)) {

@@ -24,7 +24,7 @@ export const EndTurnComponent: FunctionComponent<EndTurnProps> = ({ onEndTurn })
         <div className="absolute bg-gray-300 rounded-lg shadow-md inset-3 transform translate-y-5"></div>
         <div className="relative bg-gray-100 rounded-lg shadow-md px-8 py-4">
             <a className="inline-block cursor-pointer px-10 py-2 rounded-full bg-green-400 text-white font-bold transition-colors hover:bg-green-500"
-                onClick={() => onEndTurn()}>{i18n.format(LangKey.EndTurn)}</a>
+                onClick={() => onEndTurn()}>{i18n.formatHtml(LangKey.EndTurn)}</a>
         </div>
     </div>
 }

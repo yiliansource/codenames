@@ -1,5 +1,6 @@
 import React from 'react';
 import { GamePhase, GameState, Hint, Player } from "../../../shared/codenames";
+import { formatPlayer } from '../formatting';
 
 import i18n, { LangKey } from "../i18n";
 
@@ -121,7 +122,7 @@ export class HintComponent extends React.Component<HintProps, HintState> {
                             <span className="font-bold">{this.props.hint.word}</span>,&nbsp;
                             <span className="text-gray-600">{this.props.hint.amount}</span>
                         </p>
-                        : <p>{i18n.format(LangKey.HintPleaseWait)}</p> }
+                        : <p>{i18n.formatHtml(LangKey.HintPleaseWait, formatPlayer(this.props.game.players.find(p => p.isGameMaster && p.team === this.props.game.inTurn)))}</p> }
                 </div>
             </div>
         }

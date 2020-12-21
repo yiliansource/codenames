@@ -44,10 +44,14 @@ export function createLogger(game?: GameState, options?: LoggerOptions): Logger 
     
     return {
         info(message: string) {
-            console.info(this.format(chalk.white(message)));
+            if (process.env.NODE_ENV !== "production") {
+                console.info(this.format(chalk.white(message)));
+            }
         },
         warn(message: string) {
-            console.warn(this.format(chalk.yellow(message)));
+            if (process.env.NODE_ENV !== "production") {
+                console.warn(this.format(chalk.yellow(message)));
+            }
         },
         error(message: string) {
             console.error(this.format(chalk.red(message)));
