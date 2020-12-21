@@ -34,6 +34,8 @@ const performGameEntryAction = (event: string, options: JoinGameOptions) => {
                 ReactDOM.render(<Game state={game} socket={socket} />, container);
                 // Push the game ID into the URL, to allow quick joins via URL.
                 window.history.pushState({}, '', window.location.href.split('?')[0] + "?id=" + game.id);
+                // Ensure that the user needs to confirm navigation away from the page.
+                window.onbeforeunload = () => true;
 
                 // Tell the form that a valid game state was received.
                 resolve(game);
@@ -48,11 +50,6 @@ registration.show(container, {
     onCreateGame: (options): Promise<GameState> => performGameEntryAction('createGame', options),
     onJoinGame: (options): Promise<GameState> => performGameEntryAction('joinGame', options)
 });
-
-// Ensure that the user needs to confirm navigation away from the page.
-window.onbeforeunload = function(e) {
-    return true;
-}
 
 type GameProps = {
     state: GameState;
