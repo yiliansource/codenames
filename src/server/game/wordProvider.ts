@@ -28,8 +28,10 @@ export function getAllWords(lang: Language): string[] {
 /**
  * Returns a specified amount of random words from the given language.
  */
-export function getWords(lang: Language, amount: number) {
-    return shuffle(getAllWords(lang)).slice(0, amount);
+export function getWords(lang: Language, amount: number, exclude?: string[]) {
+    return shuffle(getAllWords(lang))
+        .filter(value => exclude == undefined || !exclude.includes(value))
+        .slice(0, amount);
 }
 
 /**

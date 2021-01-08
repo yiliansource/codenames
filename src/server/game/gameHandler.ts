@@ -69,7 +69,7 @@ export function createGameHandler(caller: Player, game: GameState): GameHandler 
             setGameMaster(TeamColour.Blue);
             
             let startingTeam = randomTeam();
-            let words = getWords(game.language, gameDefaults.totalCardAmount);
+            let words = getWords(game.language, gameDefaults.totalCardAmount, game.cards != undefined ? game.cards.map(c => c.content) : undefined);
             let solutions = generateSolution(gameDefaults.totalCardAmount, gameDefaults.cardsPerTeam, gameDefaults.assassins, startingTeam);
 
             game.cards = words.map((word: string, index: number) => <Card>{ content: word, colour: solutions[index] });
